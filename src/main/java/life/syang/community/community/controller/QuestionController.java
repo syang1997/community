@@ -3,16 +3,19 @@ package life.syang.community.community.controller;
 import life.syang.community.community.mapper.QuestionMapper;
 import life.syang.community.community.model.BaseInfo;
 import life.syang.community.community.model.Question;
+import life.syang.community.community.model.User;
 import life.syang.community.community.service.QuestionService;
+import life.syang.community.community.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/question")
-public class QuestionController {
+public class QuestionController extends BaseController{
     @Autowired
     private QuestionService questionService;
+
 
     @ResponseBody
     @PostMapping("/issue")
@@ -20,9 +23,15 @@ public class QuestionController {
         if(question!=null){
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            User user=userUtil.onlinUser(response,request);
+            if(user==null){
+                return BaseInfo.failInfo("未登陆!",null);
+            }
             try {
+                question.setCreator(user);
                 questionService.insertQuestion(question);
             } catch (Exception e) {
+                e.printStackTrace();
                 return BaseInfo.failInfo("发布出错!",null);
             }
         }

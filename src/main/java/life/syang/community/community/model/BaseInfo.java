@@ -18,7 +18,7 @@ public class BaseInfo {
         BaseInfo baseInfo = new BaseInfo();
         baseInfo.setPrompt(prompt);
         baseInfo.setData(data);
-        baseInfo.setCode(0);
+        baseInfo.setCode(1);
         return baseInfo;
     }
 }

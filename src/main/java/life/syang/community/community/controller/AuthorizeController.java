@@ -2,6 +2,7 @@ package life.syang.community.community.controller;
 
 import life.syang.community.community.dto.AccessTokenDTO;
 import life.syang.community.community.dto.GithubUser;
+import life.syang.community.community.model.BaseInfo;
 import life.syang.community.community.model.User;
 import life.syang.community.community.provider.GithubProvider;
 import life.syang.community.community.service.UserService;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
-public class AuthorizeController {
+public class AuthorizeController extends BaseController {
     @Autowired
     private GithubProvider githubProvider;
     @Autowired
@@ -30,9 +31,7 @@ public class AuthorizeController {
     private String redirectUri;
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
-                           @RequestParam(name = "state")String state,
-                           HttpServletRequest request,
-                           HttpServletResponse response){
+                           @RequestParam(name = "state")String state){
         AccessTokenDTO accessTokenDTO=new AccessTokenDTO();
         accessTokenDTO.setCode(code);
         accessTokenDTO.setState(state);
@@ -50,7 +49,7 @@ public class AuthorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(gituser.getAvatarUrl());
-            if(userService.queryById(user.getAccountId())==null){
+            if(userService.queryById(user.getId())==null){
                 userService.insertUser(user);
             }
 

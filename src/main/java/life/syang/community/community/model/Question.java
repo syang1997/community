@@ -8,7 +8,7 @@ public class Question {
     private String description;
     private long gmtCreate;
     private long gmtModified;
-    private int creator;
+    private User creator;//发布人
     private int commentCount;
     private int viewCount;
     private String tag;

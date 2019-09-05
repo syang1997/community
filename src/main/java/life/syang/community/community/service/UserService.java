@@ -5,7 +5,7 @@ import life.syang.community.community.model.User;
 public interface UserService {
     User queryByToken(String token);
 
-    User queryById(String accountId);
+    User queryById(int id);
 
     void insertUser(User user);
 }

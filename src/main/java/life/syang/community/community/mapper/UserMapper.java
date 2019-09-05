@@ -11,8 +11,8 @@ public interface UserMapper {
     @Insert("insert into user(name,account_id,token,gmt_create,gmt_modified) values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})")
     void insertUser(User user);
 
-    @Select("select * from user where account_id=#{id}")
-    User queryById(@Param("id") String id);
+    @Select("select * from user where id=#{id}")
+    User queryById(@Param("id") int id);
 
     @Select("select * from user where token=#{token}")
     User queryByToken(@Param("token") String token);
