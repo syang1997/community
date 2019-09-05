@@ -1,4 +1,4 @@
-package life.syang.community.community.dto;
+package life.syang.community.community.model;
 
 public class User {
     private String name;
