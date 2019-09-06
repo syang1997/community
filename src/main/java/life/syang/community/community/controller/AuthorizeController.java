@@ -49,10 +49,10 @@ public class AuthorizeController extends BaseController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(gituser.getAvatarUrl());
-            if(userService.queryById(user.getId())==null){
+            if(userService.queryByAccountId(user.getAccountId())==null){
                 userService.insertUser(user);
             }
-
+            userService.userLogin(user);
             response.addCookie(new Cookie("token",user.getToken()));
             return "redirect:/";
         }else {

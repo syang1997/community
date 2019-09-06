@@ -24,4 +24,14 @@ public class UserServiceImpl implements UserService {
     public void insertUser(User user) {
         userMapper.insertUser(user);
     }
+
+    @Override
+    public User queryByAccountId(String accountId) {
+        return userMapper.queryByAccountId(accountId);
+    }
+
+    @Override
+    public void userLogin(User user) {
+        userMapper.updataToken(user);
+    }
 }

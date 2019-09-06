@@ -8,4 +8,8 @@ public interface UserService {
     User queryById(int id);
 
     void insertUser(User user);
+
+    User queryByAccountId(String accountId);
+
+    void userLogin(User user);
 }

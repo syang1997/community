@@ -18,3 +18,10 @@ body{
     font-weight: normal;
     color: #999;
 }
+.pages{
+    float:left;
+    margin-bottom: 20px;
+}
+.sections{
+    margin-top: 30px;
+}

@@ -3,48 +3,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>码洋</title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap-theme.css"/>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/community.css"/>
-    <script src="js/bootstrap.js" type="application/javascript"></script>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/community.css"/>
+    <script src="/js/bootstrap.js" type="application/javascript"></script>
 </head>
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only"><h3>码洋</h3></span>
-            </button>
-            <a class="navbar-brand" href="/">码洋</a>
-        </div>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <form class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="搜索">
-                </div>
-                <button type="submit" class="btn btn-default">搜索</button>
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li th:if="${session.user==null}"><a
-                        href="https://github.com/login/oauth/authorize?client_id=ffa5ba2e813be2787c75&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a>
-                </li>
-                <li th:if="${session.user!=null}" class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false" th:text="${session.user.getName()}"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div th:insert="navigation :: nav"></div>
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
@@ -92,7 +58,7 @@ function transmit() {
     }else {
         $.ajax({
             type:"POST",
-            url:"/question/issue",
+            url:"/question/publish",
             data:{"title":title,"description":description,"tag":tag},
             success:function (result) {
                 if(result.code==0){

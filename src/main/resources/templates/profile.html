@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <title th:text="${sectionName}"></title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/community.css"/>
+    <script src="/js/bootstrap.js" type="application/javascript"></script>
+</head>
+<body>
+<div th:insert="navigation :: nav"></div>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span th:text="${sectionName}"></span></h2>
+            <hr>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div class="list-group sections">
+                <a href="/profile/questions"  th:class="${section=='questions'}?'list-group-item active' : 'list-group-item'">
+                    我的提问
+                    <span class="badge">12</span>
+                </a>
+                <a href="/profile/replies"  th:class="${section=='replies'}?'list-group-item active' : 'list-group-item'">最新回复</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:inline="none" type="text/javascript">
+</script>
+</html>
