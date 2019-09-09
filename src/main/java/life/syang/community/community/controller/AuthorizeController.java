@@ -47,13 +47,23 @@ public class AuthorizeController extends BaseController {
             user.setAvatarUrl(gituser.getAvatarUrl());
             if(userService.queryByAccountId(user.getAccountId())==null){
                 userService.insertUser(user);
+            }else {
+                userService.userLogin(user);
             }
-            userService.userLogin(user);
             response.addCookie(new Cookie("token",user.getToken()));
             return "redirect:/";
         }else {
             //登录失败
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(){
+        request.getSession().removeAttribute("user");
+        Cookie cookie=new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }

@@ -20,6 +20,6 @@ public interface UserMapper {
     @Select("select * from user where account_id=#{accountId}")
     User queryByAccountId(@Param("accountId") String accountId);
 
-    @Update("update user set token=#{token} where account_id=#{accountId}")
+    @Update("update user set token=#{token},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} where account_id=#{accountId}")
     void updataToken(User user);
 }
