@@ -13,4 +13,8 @@ public interface QuestionMapper {
     @Results(@Result(column = "creator",property = "creator",one = @One(select = "life.syang.community.community.mapper.UserMapper.queryByCreater")))
     @Select("select * from question")
     List<Question> getPageQuestion();
+
+    @Results(@Result(column = "creator",property = "creator",one = @One(select = "life.syang.community.community.mapper.UserMapper.queryByCreater")))
+    @Select("select * from question where id=#{id}")
+    Question getQuestionById(@Param("id") Integer id);
 }

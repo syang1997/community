@@ -7,12 +7,8 @@ import life.syang.community.community.model.User;
 import life.syang.community.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/question")
@@ -27,7 +23,7 @@ public class QuestionController extends BaseController{
         if(question!=null){
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            User user=userUtil.onlinUser(response,request);
+            User user= (User) request.getSession().getAttribute("user");
             if(user==null){
                 return BaseInfo.failInfo("未登陆!",null);
             }
@@ -53,5 +49,19 @@ public class QuestionController extends BaseController{
             return BaseInfo.failInfo("查询异常",null);
         }
         return BaseInfo.successInfo("成功",pageInfo);
+    }
+
+    @GetMapping("/{id}")
+    public String question(@PathVariable(name="id") Integer id, Model model){
+        try {
+            User user= (User) request.getSession().getAttribute("user");
+            if(user!=null){
+                model.addAttribute(questionService.queryQuestionById(id));
+                return "question";
+            }
+        }catch (Exception e){
+            return "index";//跳转错误页面
+        }
+        return null;
     }
 }

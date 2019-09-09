@@ -29,4 +29,9 @@ public class QuestionServiceImpl implements QuestionService {
         PageInfo page = new PageInfo(list);
         return page;
     }
+
+    @Override
+    public Question queryQuestionById(Integer id) {
+        return questionMapper.getQuestionById(id);
+    }
 }

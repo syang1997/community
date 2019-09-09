@@ -14,21 +14,146 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span th:text="${sectionName}"></span></h2>
+            <h2><span id="headline" th:text="${sectionName}"></span></h2>
             <hr>
+            <div id="proile-table">
+
+            </div>
+            <div  class="pages">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination" id="proile-pages">
+                        <li>
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li>
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="list-group sections">
-                <a href="/profile/questions"  th:class="${section=='questions'}?'list-group-item active' : 'list-group-item'">
+                <a href="#" id="questions" onclick="getMyQuestions(1)" th:class="${section=='questions'}?'list-group-item active' : 'list-group-item'">
                     我的提问
                     <span class="badge">12</span>
                 </a>
-                <a href="/profile/replies"  th:class="${section=='replies'}?'list-group-item active' : 'list-group-item'">最新回复</a>
+                <a href="#" id="replies" onclick="getMyReplies(1)" th:class="${section=='replies'}?'list-group-item active' : 'list-group-item'">最新回复</a>
             </div>
         </div>
     </div>
 </div>
 </body>
 <script th:inline="none" type="text/javascript">
+    $(function () {
+        var tiltle=$(document).attr("title");
+        if(tiltle=='我的提问'){
+            getMyQuestions(1);
+        }
+        else if(tiltle=='最新回复'){
+            getMyReplies(1);
+        }
+    });
+
+    function getMyQuestions(pn) {
+        onclickClass('questions');
+        $.ajax({
+           url:"/profile/myQuestions",
+            type:"POST",
+            data:{"pn":pn},
+            success:function (result) {
+                if(result.code==0){
+                    var question=result.data.list;
+                    var pageInfo=result.data;
+                    var num=1;
+                    var li='';
+                    $('#proile-pages').empty();
+                    $("#proile-table").empty();
+                    $.each(question,function(inde,question) {
+                        li='<div class="media">\n' +
+                            '                <div class="media-left">\n' +
+                            '                    <a href="#">\n' +
+                            '                        <img class="media-object img-rounded" src="'+question.creator.avatarUrl+'" alt="..." >\n' +
+                            '                    </a>\n' +
+                            '                </div>\n' +
+                            '                <div class="media-body">\n' +
+                            '                    <h4 class="media-heading">'+question.title+'</h4><br>\n' +
+                            '                    <span class="question-count">'+question.commentCount+'个回复●'+question.viewCount+'次浏览●'+question.gmtModified+'个小时前</span>\n' +
+                            '                </div>\n' +
+                            '            </div>';
+                        $("#proile-table").append(li);
+                    });
+                    if(pageInfo.isFirstPage){
+                        li= '                        <li class="disabled">\n' +
+                            '                            <a href="#" aria-label="Previous">\n' +
+                            '                                <span aria-hidden="true">&laquo;</span>\n' +
+                            '                            </a>\n' +
+                            '                        </li>';
+                    }else {
+                        li= '                        <li>\n' +
+                            '                            <a href="#" onclick="getMyQuestions(1)"aria-label="Previous">\n' +
+                            '                                <span aria-hidden="true">&laquo;</span>\n' +
+                            '                            </a>\n' +
+                            '                        </li>';
+                    }
+                    $('#proile-pages').append(li);
+                    for(num;num<=pageInfo.pages;num++){
+                        if(pageInfo.pageNum==num){
+                            li='<li class="active"><a href="#">'+num+'</a></li>';
+                        }else {
+                            li='<li><a href="#" onclick="getMyQuestions('+num+')">'+num+'</a></li>';
+                        }
+                        $('#proile-pages').append(li);
+
+                    }
+                    if(pageInfo.isLastPage){
+                        li='<li class="disabled">\n' +
+                            '                            <a href="#" aria-label="Next">\n' +
+                            '                                <span aria-hidden="true">&raquo;</span>\n' +
+                            '                            </a>\n' +
+                            '                        </li>\n';
+                    }else {
+                        li='<li>\n' +
+                            '                            <a href="#" onclick="getMyQuestions(99999999)" aria-label="Next">\n' +
+                            '                                <span aria-hidden="true">&raquo;</span>\n' +
+                            '                            </a>\n' +
+                            '                        </li>\n' ;
+                    }
+                    $('#proile-pages').append(li);
+                }
+                if(result.code==1){
+                    alert(result.prompt);
+                }
+            }
+        });
+    };
+
+    function getMyReplies(pn) {
+        onclickClass('replies');
+    };
+
+    function onclickClass(action) {
+        if(action=='questions'){
+            $('#questions').attr("class","list-group-item active");
+            $('#replies').attr("class","list-group-item");
+            $(document).attr("title","我的提问");
+            $('#headline').text("我的提问");
+        }
+        else if(action=='replies'){
+            $('#replies').attr("class","list-group-item active");
+            $('#questions').attr("class","list-group-item");
+            $(document).attr("title","最新回复");
+            $('#headline').text("最新回复");
+        }
+    };
 </script>
 </html>

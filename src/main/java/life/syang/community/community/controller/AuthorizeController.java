@@ -2,7 +2,6 @@ package life.syang.community.community.controller;
 
 import life.syang.community.community.dto.AccessTokenDTO;
 import life.syang.community.community.dto.GithubUser;
-import life.syang.community.community.model.BaseInfo;
 import life.syang.community.community.model.User;
 import life.syang.community.community.provider.GithubProvider;
 import life.syang.community.community.service.UserService;
@@ -11,10 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller

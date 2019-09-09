@@ -41,7 +41,7 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>指南</h3>
+            <h3>热门问题</h3>
             问题标题:请用精简的语言描述您发布的问题,不超过25宇<br>
             问题补充:详细补充您的问题内容,并确保问题描述清晰直观,并提供一些相关的资料.<br>
             选择标签:选择一个或者多个合适的标签,用逗号隔开,每个标签不超过10个字<br>
@@ -51,9 +51,9 @@
 </body>1
 <script th:inline="none" type="text/javascript">
     $(function (){
-        getlit(1);
+        getMyQuestions(1);
     });
-    function getlit(num) {
+    function getMyQuestions(num) {
         $.ajax({
             url:"/question/list/"+num,
             type:"POST",
@@ -87,7 +87,7 @@
                             '                        </li>';
                     }else {
                         li= '                        <li>\n' +
-                            '                            <a href="#" onclick="getlit(1)"aria-label="Previous">\n' +
+                            '                            <a href="#" onclick="getMyQuestions(1)"aria-label="Previous">\n' +
                             '                                <span aria-hidden="true">&laquo;</span>\n' +
                             '                            </a>\n' +
                             '                        </li>';
@@ -97,7 +97,7 @@
                         if(pageInfo.pageNum==num){
                             li='<li class="active"><a href="#">'+num+'</a></li>';
                         }else {
-                            li='<li><a href="#" onclick="getlit('+num+')">'+num+'</a></li>';
+                            li='<li><a href="#" onclick="getMyQuestions('+num+')">'+num+'</a></li>';
                         }
                         $('#question-pages').append(li);
 
@@ -110,7 +110,7 @@
                             '                        </li>\n';
                     }else {
                         li='<li>\n' +
-                            '                            <a href="#" onclick="getlit(99999999)" aria-label="Next">\n' +
+                            '                            <a href="#" onclick="getMyQuestions(99999999)" aria-label="Next">\n' +
                             '                                <span aria-hidden="true">&raquo;</span>\n' +
                             '                            </a>\n' +
                             '                        </li>\n' ;
