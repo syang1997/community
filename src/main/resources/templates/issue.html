@@ -14,20 +14,21 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发布</h2>
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span th:text="${question.id==null}?'发布':'修改'"></span>发布</h2>
             <hr>
             <form>
+                <input type="text" id="questionid" th:value="${question.id}" style="display:none" />
                 <div class="form-group">
                     <label for="title">问题标题</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题" th:value="${question.title}">
                 </div>
                 <div class="form-group">
                     <label for="description">问题补充(必填)</label>
-                    <textarea class="form-control" id="description" name="description" cols="30" rows="25%"></textarea>
+                    <textarea class="form-control" id="description" name="description" cols="30" rows="25%" th:text="${question.description}"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="tag">添加标签</label>
-                    <input type="text" class="form-control" id="tag" name="tag" placeholder="以,隔开">
+                    <input type="text" class="form-control" id="tag" name="tag" placeholder="以,隔开" th:value="${question.tag}">
                 </div>
                 <div class="form-group" >
                     <div id="alertmsg"></div>
@@ -46,6 +47,7 @@
 </body>
 <script th:inline="none" type="text/javascript">
 function transmit() {
+    var filg=$('#questionid').val();
     var title=$("#title").val();
     var description=$("#description").val();
     var tag=$("#tag").val();
@@ -56,18 +58,34 @@ function transmit() {
     } else if(tag==''){
         alertdanger("请输入标签!")
     }else {
-        $.ajax({
-            type:"POST",
-            url:"/question/publish",
-            data:{"title":title,"description":description,"tag":tag},
-            success:function (result) {
-                if(result.code==0){
-                    window.location.href="/";
-                }if (result.code==1){
-                    alert(result.prompt);
+        if(filg==''){
+            $.ajax({
+                type:"POST",
+                url:"/question/publish",
+                data:{"title":title,"description":description,"tag":tag},
+                success:function (result) {
+                    if(result.code==0){
+                        window.location.href="/";
+                    }if (result.code==1){
+                        alert(result.prompt);
+                    }
                 }
-            }
-        });
+            });
+        }
+        else {
+            $.ajax({
+                type:"POST",
+                url:"/question/update",
+                data:{"title":title,"description":description,"tag":tag,"id":filg},
+                success:function (result) {
+                    if(result.code==0){
+                        window.location.href="/";
+                    }if (result.code==1){
+                        alert(result.prompt);
+                    }
+                }
+            });
+        }
     }
 
 }

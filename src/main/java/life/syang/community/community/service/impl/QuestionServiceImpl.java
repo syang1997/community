@@ -2,6 +2,8 @@ package life.syang.community.community.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import life.syang.community.community.exception.CustomizeErrorCode;
+import life.syang.community.community.exception.CustomizeException;
 import life.syang.community.community.mapper.QuestionMapper;
 import life.syang.community.community.model.Question;
 import life.syang.community.community.service.QuestionService;
@@ -31,7 +33,21 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question queryQuestionById(Integer id) {
-        return questionMapper.getQuestionById(id);
+    public Question queryQuestionById(long id) {
+        Question questionById = questionMapper.getQuestionById(id);
+        if(questionById==null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
+        return questionById;
+    }
+
+    @Override
+    public void updateQuestion(Question question) {
+        questionMapper.updateQuestion(question);
+    }
+
+    @Override
+    public void increaseviewCount(long id) {
+        questionMapper.increaseViewCount(id);
     }
 }

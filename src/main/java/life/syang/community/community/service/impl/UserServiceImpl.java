@@ -1,5 +1,7 @@
 package life.syang.community.community.service.impl;
 
+import life.syang.community.community.exception.CustomizeErrorCode;
+import life.syang.community.community.exception.CustomizeException;
 import life.syang.community.community.mapper.UserMapper;
 import life.syang.community.community.model.User;
 import life.syang.community.community.service.UserService;
@@ -27,7 +29,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User queryByAccountId(String accountId) {
-        return userMapper.queryByAccountId(accountId);
+        User user = userMapper.queryByAccountId(accountId);
+        if(user==null){
+            throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
+        }
+        return user;
     }
 
     @Override

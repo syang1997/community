@@ -1,5 +1,6 @@
 package life.syang.community.community.controller;
 
+import life.syang.community.community.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,4 +11,6 @@ public class BaseController {
     protected HttpServletRequest request;
     @Autowired
     protected HttpServletResponse response;
+    @Autowired
+    protected UserUtil userUtil;
 }

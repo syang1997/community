@@ -78,18 +78,18 @@
                     var li='';
                     $('#proile-pages').empty();
                     $("#proile-table").empty();
-                    li='<div class="media">\n' +
-                        '                    <a href="/question/'+question.id+'">\n' +
-                        '                <div class="media-left">\n' +
-                        '                        <img class="media-object img-rounded" src="'+question.creator.avatarUrl+'" alt="..." >\n' +
-                        '                </div>\n' +
-                        '                <div class="media-body">\n' +
-                        '                    <h4 class="media-heading">'+question.title+'</h4><br>\n' +
-                        '                    <span class="question-count">'+question.commentCount+'个回复●'+question.viewCount+'次浏览●'+question.gmtModified+'个小时前</span>\n' +
-                        '                </div>\n' +
-                        '                    </a>\n' +
-                        '            </div>';
                     $.each(question,function(inde,question) {
+                        li='<div class="media">\n' +
+                            '                    <a href="/question/'+question.id+'">\n' +
+                            '                <div class="media-left">\n' +
+                            '                        <img class="media-object img-rounded" src="'+question.creator.avatarUrl+'" alt="..." >\n' +
+                            '                </div>\n' +
+                            '                <div class="media-body">\n' +
+                            '                    <h4 class="media-heading">'+question.title+'</h4><br>\n' +
+                            '                    <span class="question-count">'+question.commentCount+'个回复●'+question.viewCount+'次浏览●'+question.gmtModified+'个小时前</span>\n' +
+                            '                </div>\n' +
+                            '                    </a>\n' +
+                            '            </div>';
                         $("#proile-table").append(li);
                     });
                     if(pageInfo.isFirstPage){

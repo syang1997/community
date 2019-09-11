@@ -19,7 +19,7 @@ public class ProfileServiceImpl implements ProfileService {
     private int pageSize;
 
     @Override
-    public PageInfo queryQuestionById(Integer id,Integer num) {
+    public PageInfo queryQuestionById(int id,int num) {
         if (!"".equals(id)){
             PageHelper.startPage(num,pageSize);
             List<Question> list= profileMapper.queryById(id);

@@ -16,5 +16,11 @@ public interface QuestionMapper {
 
     @Results(@Result(column = "creator",property = "creator",one = @One(select = "life.syang.community.community.mapper.UserMapper.queryByCreater")))
     @Select("select * from question where id=#{id}")
-    Question getQuestionById(@Param("id") Integer id);
+    Question getQuestionById(@Param("id") long id);
+
+    @Update("update question set title=#{title},description=#{description},tag=#{tag}, where id=#{id}")
+    void updateQuestion(Question question);
+
+    @Update("update question set view_count=view_count+1 where id=#{id}")
+    void increaseViewCount(@Param("id") long id);
 }

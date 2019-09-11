@@ -7,5 +7,5 @@ import life.syang.community.community.model.Question;
 import java.util.List;
 
 public interface ProfileService {
-    PageInfo queryQuestionById(Integer id,Integer num);
+    PageInfo queryQuestionById(int id,int num);
 }

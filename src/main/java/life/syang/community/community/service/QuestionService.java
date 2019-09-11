@@ -10,5 +10,9 @@ public interface QuestionService {
 
     PageInfo getQuestionList(int num);
 
-    Question queryQuestionById(Integer id);
+    Question queryQuestionById(long id);
+
+    void updateQuestion(Question question1);
+
+    void increaseviewCount(long id);
 }

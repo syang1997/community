@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class BaseInfo {
-    private Integer code;
+    private int code;
     private String prompt;
     private Object data;
     public static BaseInfo successInfo(String prompt,Object data){

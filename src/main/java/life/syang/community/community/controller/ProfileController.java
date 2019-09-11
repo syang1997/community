@@ -35,10 +35,10 @@ public class ProfileController extends BaseController{
 
     @PostMapping("/myQuestions")
     @ResponseBody
-    public BaseInfo getMyQuestions(Integer pn){
+    public BaseInfo getMyQuestions(int pn){
         PageInfo pageInfo;
         try {
-            User user= (User) request.getSession().getAttribute("user");
+            User user=userUtil.getUser(request);
             if(user==null){
                 return BaseInfo.failInfo("未登陆",null);
             }
