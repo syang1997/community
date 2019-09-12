@@ -50,4 +50,9 @@ public class QuestionServiceImpl implements QuestionService {
     public void increaseviewCount(long id) {
         questionMapper.increaseViewCount(id);
     }
+
+    @Override
+    public void increaseCommentCount(long id) {
+        questionMapper.increaseCommentCount(id);
+    }
 }

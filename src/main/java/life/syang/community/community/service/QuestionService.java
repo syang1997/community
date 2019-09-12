@@ -15,4 +15,6 @@ public interface QuestionService {
     void updateQuestion(Question question1);
 
     void increaseviewCount(long id);
+
+    void increaseCommentCount(long id);
 }

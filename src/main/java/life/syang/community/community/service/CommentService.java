@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface CommentService {
 
-    Map<String, List<Comment>> queryCommentOnQuestion(int id);
+    Map<String, List<Comment>> queryCommentOnQuestion(long id);
 
     void insertComment(Comment comment);
 }

@@ -15,7 +15,7 @@ public class Comment {
     private long id;
     private long parentId;
     private int type;
-    private User commentator;
+    private User creator;
     private long gmtCreate;
     private long gmtModified;
     private long likeCount;
