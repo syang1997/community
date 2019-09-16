@@ -28,15 +28,20 @@ public class CommentController extends BaseController{
     @Transactional
     @ResponseBody
     @PostMapping("/send")
-    public BaseInfo sendComment(Comment comment,long questionsId){
+    public BaseInfo sendComment(Comment comment,long questionId){
         User user=userUtil.getUser(request);
         if(user==null){
-            return BaseInfo.failInfo("请登陆后评论!",null);
+            return BaseInfo.failInfo("请登陆!",null);
         }
         if(comment!=null){
             comment.setCreator(user);
-            commentService.insertComment(comment);
-            questionService.increaseCommentCount(questionsId);
+            comment.setGmtModified(System.currentTimeMillis());
+            comment.setGmtCreate(comment.getGmtModified());
+            try{
+                commentService.insertComment(comment);
+                questionService.increaseCommentCount(questionId);
+            }catch (Exception e){
+            }
         }
         return BaseInfo.successInfo("评论成功!",null);
     }

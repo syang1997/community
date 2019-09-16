@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    @Insert("insert into comment(parentId,type,commentator,gmtCreate,gmtModified,likeCount,content) values(#{parentId},#{type},#{commentator},#{gmtCreate},#{gmtModified},#{likeCount},#{content})")
+    @Insert("insert into comment(parent_id,type,creator,gmt_create,gmt_modified,like_count,content) values(#{parentId},#{type},#{creator.id},#{gmtCreate},#{gmtModified},#{likeCount},#{content})")
     void insertComment(Comment comment);
 
     @Results(@Result(column = "creator",property = "creator",one = @One(select = "life.syang.community.community.mapper.UserMapper.queryByCreater")))

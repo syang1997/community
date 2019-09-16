@@ -27,7 +27,7 @@ public class QuestionController extends BaseController{
             question.setGmtModified(question.getGmtCreate());
             User user=userUtil.getUser(request);
             if(user==null){
-                return BaseInfo.failInfo("未登陆!",null);
+                return BaseInfo.failInfo("请登陆!",null);
             }
             try {
                 question.setCreator(user);
@@ -88,7 +88,7 @@ public class QuestionController extends BaseController{
                 if (question1.getCreator().getId()==user.getId()){
                     questionService.updateQuestion(question);
                 }else {
-                    return BaseInfo.failInfo("请登陆",null);
+                    return BaseInfo.failInfo("请登陆!",null);
             }
             return BaseInfo.failInfo("修改出错",null);
         }

@@ -40,7 +40,7 @@ public class ProfileController extends BaseController{
         try {
             User user=userUtil.getUser(request);
             if(user==null){
-                return BaseInfo.failInfo("未登陆",null);
+                return BaseInfo.failInfo("请登陆!",null);
             }
              pageInfo=profileService.queryQuestionById(user.getId(),pn);
         }catch (Exception e){
