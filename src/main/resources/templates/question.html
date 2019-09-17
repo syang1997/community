@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
     <script src="/js/bootstrap.js" type="application/javascript"></script>
-    <script src="/js/comment.js" type="application/javascript"></script>
     <script src="/js/until.js" type="application/javascript"></script>
+    <script src="/js/comment.js" type="application/javascript"></script>
 </head>
 <body>
 <div th:insert="navigation :: nav"></div>
@@ -27,6 +27,14 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}">
             </div>
             <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <!--标签-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <span class="label label-info question-tag"  th:each="tag : ${question.tag.split(',')}">
+                    <span class="glyphicon glyphicon-tags"></span>
+                    <span  class="label label-info" th:text="${tag}"></span>
+                </span>
+            </div>
+            <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="commentMain">
                 <div th:if="${session.user!=null}">
                     <div th:if="${session.user.id==question.creator.id}">
@@ -39,29 +47,32 @@
                 <h3>
                     <span th:text="${question.commentCount}"></span><span>个回复</span>
                 </h3>
-                <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comments">
-                    <div class="media">
-                        <div class="media-left">
-                        <a >
-                            <img class="media-object img-rounded" th:src="${question.creator.avatarUrl}">
-                        </a>
-                        </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comments" id="commentsList">
+<!--                    <div class="media">-->
+<!--                        <div class="media-left">-->
+<!--                        <a >-->
+<!--                            <img class="media-object img-rounded" th:src="${question.creator.avatarUrl}">-->
+<!--                        </a>-->
+<!--                        </div>-->
 
-                    <div class="media-body">
-                        <h5 class="media-heading">
-                            <span th:text="${question.creator.name}"></span>
-                        </h5>
-                        <div>回复内容</div>
-                        <div class="menu">
-                            <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-comment icon" aria-hidden="true"></span>
-                            <span class="pull-right" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
-                        </div>
-                    </div>
-                    </div>
+<!--                    <div class="media-body">-->
+<!--                        <h5 class="media-heading">-->
+<!--                            <span th:text="${question.creator.name}"></span>-->
+<!--                        </h5>-->
+<!--                        <div>回复内容</div>-->
+<!--                        <div class="menu">-->
+<!--                            <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"></span>-->
+<!--                            <span class="glyphicon glyphicon-comment icon" aria-hidden="true"></span>-->
+<!--                            <span class="pull-right" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    </div>-->
+
+                    <!--二级评论-->
+<!--                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse in" id="comment-6">-->
+<!--                        二级评论-->
+<!--                    </div>-->
                 </div>
-                <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="media">
                         <a>
@@ -90,18 +101,39 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h5 class="media-heading" th:text="${question.creator.name}"></h5>
+                        <h4 class="media-heading" th:text="${question.creator.name}"></h4>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <h4>相关问题</h4>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 biankuang">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <h4>相关问题</h4>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="related : ${recommend}">
+                            <td >
+                                <a th:href="@{'/question/'+${related.id}}" >
+                                <h4 th:text="${related.title}"></h4>
+                            </a>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 </body>
 <script th:inline="none" type="text/javascript">
-    
+    $(function () {
+        var id=$('#questionId').val();
+        getComment(id);
+    })
 </script>
 </html>

@@ -16,6 +16,7 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/issue">提问</a></li>
+                    <li><a href="/profile/replies">通知 <span class="badge">42</span></a></li>
                     <li th:if="${session.user==null}"><a href="https://github.com/login/oauth/authorize?client_id=ffa5ba2e813be2787c75&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a></li>
                     <li th:if="${session.user!=null}" class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" ><span th:utext="${session.user.getName()}"></span> <span class="caret"></span></a>

@@ -34,10 +34,29 @@ public class CommentServiceImpl implements CommentService {
         return maps;
     }
 
+    public  List<Comment> queryCommentOnQuestionone(long id) {
+       return commentMapper.queryCommentByQuestionId(id);
+    }
+
+    @Override
+    public List<Comment> queryCommentOnQuestiontwo(long id) {
+        return commentMapper.queryCommentByQuestionIdtwo(id);
+    }
+
     @Override
     public void insertComment(Comment comment) {
         if(comment!=null){
             commentMapper.insertComment(comment);
         }
+    }
+
+    @Override
+    public void incCommentCount(long id) {
+        commentMapper.incerCountTooneComment(id);
+    }
+
+    @Override
+    public Comment queryCommentById(long id) {
+        return commentMapper.queryCommentById(id);
     }
 }

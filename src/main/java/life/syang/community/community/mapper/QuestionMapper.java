@@ -1,5 +1,6 @@
 package life.syang.community.community.mapper;
 
+import life.syang.community.community.model.Comment;
 import life.syang.community.community.model.Question;
 import org.apache.ibatis.annotations.*;
 
@@ -11,7 +12,7 @@ public interface QuestionMapper {
     void insertQuestion(Question question);
 
     @Results(@Result(column = "creator",property = "creator",one = @One(select = "life.syang.community.community.mapper.UserMapper.queryByCreater")))
-    @Select("select * from question")
+    @Select("select * from question ORDER BY gmt_modified DESC")
     List<Question> getPageQuestion();
 
     @Results(@Result(column = "creator",property = "creator",one = @One(select = "life.syang.community.community.mapper.UserMapper.queryByCreater")))
@@ -24,7 +25,16 @@ public interface QuestionMapper {
     @Update("update question set view_count=view_count+1 where id=#{id}")
     void increaseViewCount(@Param("id") long id);
 
-    @Update("update question set comment_count=comment_count+1 where id=#{id}")
+    @Update("update question set comment_count=(select count(1) from comment where parent_id=#{id} and type=1) where id=#{id}")
     void increaseCommentCount(@Param("id") long id);
+
+    @Select("select id,title,tag from question where tag regexp #{tag} and id !=#{id} ORDER BY view_count limit 0,10")
+    List<Question> queryLikeTagQuestion(@Param("id") long id,@Param("tag") String tag);
+
+    @Update("update question set gmt_modified=#{gmtModified} where id=#{id}")
+    void updataQuestionTime(@Param("gmtModified") long gmtModified,@Param("id") long id);
+
+    @Select("select * from question where id=#{0}")
+    Question queryByCreater();
 
 }

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/community.css"/>
     <script src="/js/bootstrap.js" type="application/javascript"></script>
     <script src="/js/until.js" type="application/javascript"></script>
+    <script src="/js/question.js" type="application/javascript"></script>
 </head>
 <script type="application/javascript">
     window.onload=function () {
@@ -50,86 +51,17 @@
                 </nav>
             </div>
         </div>
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>热门问题</h3>
-            问题标题:请用精简的语言描述您发布的问题,不超过25宇<br>
-            问题补充:详细补充您的问题内容,并确保问题描述清晰直观,并提供一些相关的资料.<br>
-            选择标签:选择一个或者多个合适的标签,用逗号隔开,每个标签不超过10个字<br>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 biankuang">
+                <h3>热门问题</h3>
         </div>
     </div>
 </div>
 </body>
 <script th:inline="none" type="text/javascript">
     $(function (){
-        getMyQuestions(1);
+        getQuestions(1);
     });
-    function getMyQuestions(num) {
-        $.ajax({
-            url:"/question/list/"+num,
-            type:"POST",
-            success:function (result) {
-                if(result.code==0){
-                    var question=result.data.list;
-                    var pageInfo=result.data;
-                    var num=1;
-                    var li='';
-                    $('#question-pages').empty();
-                    $("#question-list").empty();
-                    $.each(question,function(inde,question) {
-                        li='<div class="media">\n' +
-                            '                    <a href="/question/'+question.id+'">\n' +
-                            '                <div class="media-left">\n' +
-                            '                        <img class="media-object img-rounded" src="'+question.creator.avatarUrl+'" alt="..." >\n' +
-                            '                </div>\n' +
-                            '                <div class="media-body">\n' +
-                            '                    <h4 class="media-heading">'+question.title+'</h4>'+question.description+'<br>\n' +
-                            '                    <span class="question-count">'+question.commentCount+'个回复●'+question.viewCount+'次浏览●'+getDateDiff(question.gmtCreate)+'</span>\n' +
-                            '                </div>\n' +
-                            '                    </a>\n' +
-                            '            </div>';
-                            $("#question-list").append(li);
-                    });
-                    if(pageInfo.isFirstPage){
-                        li= '                        <li class="disabled">\n' +
-                            '                            <a href="#" aria-label="Previous">\n' +
-                            '                                <span aria-hidden="true">&laquo;</span>\n' +
-                            '                            </a>\n' +
-                            '                        </li>';
-                    }else {
-                        li= '                        <li>\n' +
-                            '                            <a href="#" onclick="getMyQuestions(1)"aria-label="Previous">\n' +
-                            '                                <span aria-hidden="true">&laquo;</span>\n' +
-                            '                            </a>\n' +
-                            '                        </li>';
-                    }
-                    $('#question-pages').append(li);
-                    for(num;num<=pageInfo.pages;num++){
-                        if(pageInfo.pageNum==num){
-                            li='<li class="active"><a href="#">'+num+'</a></li>';
-                        }else {
-                            li='<li><a href="#" onclick="getMyQuestions('+num+')">'+num+'</a></li>';
-                        }
-                        $('#question-pages').append(li);
 
-                    }
-                    if(pageInfo.isLastPage){
-                        li='<li class="disabled">\n' +
-                            '                            <a href="#" aria-label="Next">\n' +
-                            '                                <span aria-hidden="true">&raquo;</span>\n' +
-                            '                            </a>\n' +
-                            '                        </li>\n';
-                    }else {
-                        li='<li>\n' +
-                            '                            <a href="#" onclick="getMyQuestions(99999999)" aria-label="Next">\n' +
-                            '                                <span aria-hidden="true">&raquo;</span>\n' +
-                            '                            </a>\n' +
-                            '                        </li>\n' ;
-                    }
-                    $('#question-pages').append(li);
-                }
-            }
-        })
-    }
 
 </script>
 </html>

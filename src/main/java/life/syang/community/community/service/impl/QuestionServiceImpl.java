@@ -55,4 +55,14 @@ public class QuestionServiceImpl implements QuestionService {
     public void increaseCommentCount(long id) {
         questionMapper.increaseCommentCount(id);
     }
+
+    @Override
+    public List<Question> queryLikeTagQuestion(Question question) {
+        return questionMapper.queryLikeTagQuestion(question.getId(),question.getTag().replace(",","|"));
+    }
+
+    @Override
+    public void updataQuestionTime(long gmtModified, long id) {
+        questionMapper.updataQuestionTime(gmtModified,id);
+    }
 }

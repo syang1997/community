@@ -1,6 +1,7 @@
 package life.syang.community.community.controller;
 
 import com.github.pagehelper.PageInfo;
+import life.syang.community.community.cache.TagCache;
 import life.syang.community.community.exception.CustomizeErrorCode;
 import life.syang.community.community.exception.CustomizeException;
 import life.syang.community.community.model.BaseInfo;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/question")
@@ -31,13 +34,18 @@ public class QuestionController extends BaseController{
             }
             try {
                 question.setCreator(user);
-                questionService.insertQuestion(question);
+                if("".equals(TagCache.isValid(question.getTag()))){
+                    return BaseInfo.failInfo("标签错误",null);
+                }else {
+                    questionService.insertQuestion(question);
+                    return BaseInfo.successInfo("发布成功!",null);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 return BaseInfo.failInfo("发布出错!",null);
             }
         }
-        return BaseInfo.successInfo("发布成功!",null);
+        return BaseInfo.failInfo("发布出错!",null);
     }
 
 
@@ -49,8 +57,9 @@ public class QuestionController extends BaseController{
                Boolean b=question.getCreator().getAccountId().equals(user.getAccountId());
                Boolean c=question.getCreator().getAccountId()==user.getAccountId();
                if (question.getCreator().getAccountId().equals(user.getAccountId())){
-                   model.addAttribute(question);
-                   return "issue";
+                   model.addAttribute("question",question);
+                   model.addAttribute("tags", TagCache.get());
+                   return "/issue";
                }
             }else {
                 throw new CustomizeException(CustomizeErrorCode.USER_NOT_LOGIN);
@@ -75,9 +84,29 @@ public class QuestionController extends BaseController{
     public String question(@PathVariable(name="id") long id, Model model){
             Question question=questionService.queryQuestionById(id);
             questionService.increaseviewCount(id);
-                model.addAttribute(question);
+                model.addAttribute("question",question);
+            List<Question> lists=null;
+            if(question!=null||"".equals(question.getTag())){
+                lists=questionService.queryLikeTagQuestion(question);
+            }
+            if(lists!=null){
+                model.addAttribute("recommend",lists);
+            }
                 return "question";
     }
+
+//    @ResponseBody
+//    @PostMapping("/recommend")
+//    public BaseInfo recommendQuestion(Question question){
+//        List<Question> lists=null;
+//        if(question!=null||"".equals(question.getTag())){
+//            lists=questionService.queryLikeTagQuestion(question);
+//        }
+//        if(lists!=null){
+//            return BaseInfo.successInfo("推荐成功",lists);
+//        }
+//        return BaseInfo.failInfo("没有推荐",null);
+//    }
 
     @ResponseBody
     @PostMapping("/update")
@@ -86,12 +115,15 @@ public class QuestionController extends BaseController{
             if(user!=null){
                 Question question1=questionService.queryQuestionById(question.getId());
                 if (question1.getCreator().getId()==user.getId()){
-                    questionService.updateQuestion(question);
-                }else {
-                    return BaseInfo.failInfo("请登陆!",null);
-            }
+                    if("".equals(TagCache.isValid(question.getTag()))){
+                        return BaseInfo.failInfo("标签错误",null);
+                    }else {
+                        questionService.updateQuestion(question);
+                        return BaseInfo.successInfo("修改成功",null);
+                    }
+                }
             return BaseInfo.failInfo("修改出错",null);
         }
-        return BaseInfo.successInfo("修改成功",null);
+        return BaseInfo.failInfo("请登陆!",null);
     }
 }

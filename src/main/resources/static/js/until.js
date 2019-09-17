@@ -1,4 +1,4 @@
-//计算时差
+
 function getDateDiff(dateTimeStamp) {
     var minute = 1000 * 60;
     var hour = minute * 60;
@@ -32,4 +32,22 @@ function getDateDiff(dateTimeStamp) {
     } else
         result = "刚刚发表";
     return result;
+}
+
+//inputTime 参数是毫秒级时间戳
+function formatDate(inputTime){
+    var date = new Date(inputTime);
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    m = m < 10 ? ('0' + m) : m;
+    var d = date.getDate();
+    d = d < 10 ? ('0' + d) : d;
+    var h = date.getHours();
+    h = h < 10 ? ('0' + h) : h;
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    minute = minute < 10 ? ('0' + minute) : minute;
+    second = second < 10 ? ('0' + second) : second;
+    var time=y + '-' + m + '-' + d+' '+h+':'+minute+':'+second
+    return time;
 }

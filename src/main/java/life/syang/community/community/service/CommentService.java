@@ -9,5 +9,13 @@ public interface CommentService {
 
     Map<String, List<Comment>> queryCommentOnQuestion(long id);
 
+    List<Comment> queryCommentOnQuestionone(long id);
+
+    List<Comment> queryCommentOnQuestiontwo(long id);
+
     void insertComment(Comment comment);
+
+    void incCommentCount(long id);
+
+    Comment queryCommentById(long id);
 }

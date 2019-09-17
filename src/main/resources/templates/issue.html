@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
     <script src="/js/bootstrap.js" type="application/javascript"></script>
+    <script src="/js/question.js" type="application/javascript"></script>
 </head>
 <body>
 <div th:insert="navigation :: nav"></div>
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span th:text="${question.id==null}?'发布':'修改'"></span>发布</h2>
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span th:text="${question.id==-1}?'发布':'修改'"></span>发布</h2>
             <hr>
             <form>
                 <input type="text" id="questionid" th:value="${question.id}" style="display:none" />
@@ -28,8 +29,26 @@
                 </div>
                 <div class="form-group">
                     <label for="tag">添加标签</label>
-                    <input type="text" class="form-control" id="tag" name="tag" placeholder="以,隔开" th:value="${question.tag}">
+                    <input type="text" class="form-control" id="tag" name="tag" placeholder="以,隔开" autocomplete="off" onclick="showSelectTag()" th:value="${question.tag}">
+                    <div id="select-tag" class="question-tag-tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" th:class="${cartegory.cartegoryName=='开发语言'} ? 'presentation active':'presentation'" th:each="cartegory : ${tags}">
+                                <a th:href="'#'+${cartegory.cartegoryName}" aria-controls="home" role="tab" data-toggle="tab" th:text="${cartegory.cartegoryName}">前端</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane "  th:class="${cartegory.cartegoryName=='开发语言'} ? 'tab-pane active':'tab-pane'"th:each="cartegory : ${tags}" th:id="${cartegory.cartegoryName}">
+                            <span class="label label-info publish-tag-tab" onclick="selectTag(this)" th:data-tag="${selectTag}" th:each="selectTag : ${cartegory.tags}">
+                                <span class="glyphicon glyphicon-tags" >
+                                    <span  th:text="' '+${selectTag}"></span>
+                                </span>
+                            </span>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
                 <div class="form-group" >
                     <div id="alertmsg"></div>
                     <button type="button" class="btn btn-success btn-issue" onclick="transmit()" >发布</button>
@@ -58,7 +77,7 @@ function transmit() {
     } else if(tag==''){
         alertdanger("请输入标签!")
     }else {
-        if(filg==''){
+        if(filg==-1){
             $.ajax({
                 type:"POST",
                 url:"/question/publish",
