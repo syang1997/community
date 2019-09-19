@@ -37,4 +37,8 @@ public interface QuestionMapper {
     @Select("select * from question where id=#{0}")
     Question queryByCreater();
 
+    @Results(@Result(column = "creator",property = "creator",one = @One(select = "life.syang.community.community.mapper.UserMapper.queryByCreater")))
+    @Select("select DISTINCT * from question where tag regexp #{search} or title regexp #{search} ORDER BY view_count ")
+    List<Question> querySearchQuestion(@Param("search")String search);
+
 }

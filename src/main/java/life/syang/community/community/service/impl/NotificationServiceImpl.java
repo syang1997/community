@@ -1,19 +1,24 @@
 package life.syang.community.community.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import life.syang.community.community.mapper.NotificationMapper;
 import life.syang.community.community.model.Notification;
+import life.syang.community.community.model.User;
 import life.syang.community.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class NotificationServiceImpl implements NotificationService {
+    public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
     private NotificationMapper notificationMapper;
+    @Value("${myconfig.page-size}")
+    private int pageSize;
 
     @Override
     public void inserNotification(Notification notification) {
@@ -21,32 +26,30 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<Notification> queryNotification(long id) {
-        List<Notification> notifications = null;
-        List<Notification> notifications2 = null;
-        try {
-            notifications = notificationMapper.queryNotificationWhenQuetion(id);
-            notifications2 = notificationMapper.queryNotificationWhenComment(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if(notifications!=null&&notifications2!=null){
-            notifications.addAll(notifications2);
-        }
-        if(notifications==null){
-            return notifications;
-        }
-        Comparator c = new Comparator<Notification>() {
-            public int compare(Notification o1, Notification o2) {
-                // TODO Auto-generated method stub
-                if((long)o1.getGmtCreate()<(int)o2.getGmtCreate()){
-                    return 1;
-                } else{
-                    return -1;
-                }
-            }
-        };
-        notifications.sort(c);
-        return notifications;
+    public PageInfo queryNotification(long id,int num) {
+        PageHelper.startPage(num,pageSize);
+        List<Notification> notifications =notificationMapper.queryNotificationWhenQuetion(id);
+        PageInfo page = new PageInfo(notifications);
+        return page;
     }
+
+    @Override
+    public int readOneNotification(long id, User user) {
+        if(user!=null){
+            return notificationMapper.readOne(id,user.getId());
+        }
+        return 0;
+    }
+
+    @Override
+    public Notification queryNotifiactionByid(long id) {
+        return notificationMapper.queryNotifiactionByid(id);
+    }
+
+    @Override
+    public int queryUnreadCount(long id) {
+        return notificationMapper.queryUnreadCount(id);
+    }
+
+
 }

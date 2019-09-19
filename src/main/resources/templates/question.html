@@ -7,16 +7,20 @@
     <link rel="stylesheet" href="/css/bootstrap-theme.css"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
+    <link rel="stylesheet" href="/css/editormd.preview.min.css"/>
     <script src="/js/bootstrap.js" type="application/javascript"></script>
     <script src="/js/until.js" type="application/javascript"></script>
     <script src="/js/comment.js" type="application/javascript"></script>
+    <script src="/js/editormd.min.js" type="application/javascript"></script>
+    <script src="/js/lib/marked.min.js" type="application/javascript"></script>
+    <script src="/js/lib/prettify.min.js" type="application/javascript"></script>
 </head>
 <body>
 <div th:insert="navigation :: nav"></div>
 <div class="container-fluid main">
     <div class="row">
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h4><span th:text="${question.title}" ></span></h4>
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 question-main">
+            <h3><span th:text="${question.title}" ></span></h3>
             <hr>
             <span class="question-count">
                 作者:<span th:text="${question.creator.name}"></span>
@@ -24,7 +28,8 @@
                 阅读数:<span th:text="${question.viewCount}"></span>
             </span>
             <hr >
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view" >
+                <textarea style="display: none" th:text="${question.description}"></textarea>
             </div>
             <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <!--标签-->
@@ -41,6 +46,7 @@
                         <a class="communtiy-menu" th:href="@{'/question/redact/'+${question.id}}">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><span>编辑</span>
                         </a>
+                        <hr  class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     </div>
                 </div>
                 <!--回复列表-->
@@ -76,12 +82,12 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="media">
                         <a>
-                            <img class="media-object img-rounded" th:src="${question.creator.avatarUrl}">
+                            <img class="media-object img-rounded" th:src="${session.user.avatarUrl!=null ? session.user.avatarUrl : '/images/default-avatar.png' }">
                         </a>
                     </div>
                     <div class="media-body">
                         <h5 class="media-heading">
-                            <span th:text="${question.creator.name}"></span>
+                            <span th:text="${session.user.name!=null ? session.user.name : '匿名用户' }"></span>
                         </h5>
                     </div>
                 </div>
@@ -129,9 +135,17 @@
         </div>
     </div>
 </div>
+<div th:insert="footer :: foot"></div>
 </body>
 <script th:inline="none" type="text/javascript">
     $(function () {
+        var testView=editormd.markdownToHTML("question-view",{ htmlDecode: "style,script,iframe",
+            emoji: true,
+            taskList: true,
+            tex: true, // 默认不解析
+            flowChart: true, // 默认不解析
+            sequenceDiagram: true, // 默认不解析
+            codeFold: true,});
         var id=$('#questionId').val();
         getComment(id);
     })

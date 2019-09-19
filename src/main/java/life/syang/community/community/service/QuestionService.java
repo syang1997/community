@@ -23,4 +23,5 @@ public interface QuestionService {
 
     void updataQuestionTime(long gmtModified,long id);
 
+    PageInfo SearchQuestion(String search,int num);
 }

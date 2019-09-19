@@ -6,6 +6,7 @@ import life.syang.community.community.model.*;
 import life.syang.community.community.service.CommentService;
 import life.syang.community.community.service.NotificationService;
 import life.syang.community.community.service.QuestionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
+@Slf4j
 @RequestMapping("/comment")
 public class CommentController extends BaseController{
 
@@ -49,16 +51,17 @@ public class CommentController extends BaseController{
                 commentService.insertComment(comment);
                 if(comment.getType()==1){
                     questionService.increaseCommentCount(questionId);
-                    Notification notification=createNotification(question.getId(), user, question.getCreator(),NotificationTypeEnum.REPLY_QUESTION);
+                    Notification notification=createNotification(question.getId(), user, question.getCreator(),NotificationTypeEnum.REPLY_QUESTION,question.getTitle());
                     notificationService.inserNotification(notification);
                 }else if(comment.getType()==2){
                     questionService.increaseCommentCount(questionId);
                     commentService.incCommentCount(comment.getParentId());
-                    Notification notification=createNotification(comment1.getId(),user,comment1.getCreator(),NotificationTypeEnum.REPLY_COMMENT);
+                    Notification notification=createNotification(question.getId(),user,comment1.getCreator(),NotificationTypeEnum.REPLY_COMMENT,comment1.getContent());
                     notificationService.inserNotification(notification);
                 }
                 questionService.updataQuestionTime(comment.getGmtModified(),questionId);
             }catch (Exception e){
+                log.error("评论出错"+comment.getType()+"用户:"+user.getId());
                 return BaseInfo.failInfo("评论出错",null);
             }
         }
@@ -82,7 +85,7 @@ public class CommentController extends BaseController{
         return BaseInfo.successInfo("获取成功",lists);
     }
 
-    private Notification createNotification(long outerId, User user, User receiver,NotificationTypeEnum notificationTypeEnum) {
+    private Notification createNotification(long outerId, User user, User receiver,NotificationTypeEnum notificationTypeEnum,String title) {
         Notification notification=new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setType(notificationTypeEnum.getType());
@@ -90,6 +93,7 @@ public class CommentController extends BaseController{
         notification.setOuterId(outerId);
         notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
         notification.setReceiver(receiver);
+        notification.setTitle(title);
         return notification;
     }
 

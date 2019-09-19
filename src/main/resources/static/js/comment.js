@@ -99,7 +99,7 @@ function postCollapseComents(id) {
         data:{"parentId":parentId,"type":type,"content":content,"questionId":questionId},
         success:function (result) {
             if(result.code==1){
-                if(result.prompt="请登陆!"){
+                if(result.prompt=="请登陆!"){
                     var isAccpeted=confirm(result.prompt);
                     if(isAccpeted){
                         window.open("https://github.com/login/oauth/authorize?client_id=ffa5ba2e813be2787c75&redirect_uri=http://localhost:8080/callback&scope=user&state=1");

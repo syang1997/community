@@ -5,6 +5,7 @@ import life.syang.community.community.dto.GithubUser;
 import life.syang.community.community.model.User;
 import life.syang.community.community.provider.GithubProvider;
 import life.syang.community.community.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import javax.servlet.http.Cookie;
 import java.util.UUID;
 
 @Controller
+@Slf4j
 public class AuthorizeController extends BaseController {
     @Autowired
     private GithubProvider githubProvider;
@@ -54,6 +56,7 @@ public class AuthorizeController extends BaseController {
             return "redirect:/";
         }else {
             //登录失败
+            log.error("github-callbackFail"+gituser.getId()+gituser.getName());
             return "redirect:/";
         }
     }

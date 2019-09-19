@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
     <script src="/js/bootstrap.js" type="application/javascript"></script>
+    <script src="/js/question.js" type="application/javascript"></script>
 </head>
 <body>
 <div th:insert="navigation :: nav"></div>
-        <div class="jumbotron">
+        <div class="jumbotron error-main">
             <h1>出错了!!!</h1>
             <p th:text="${message}">服务太热了,请稍后再来试试~</p>
             <p><a class="btn btn-primary btn-lg" href="/" role="button">回到主页</a></p>
         </div>
+<div th:insert="footer :: foot"></div>
 </body>
 </html>

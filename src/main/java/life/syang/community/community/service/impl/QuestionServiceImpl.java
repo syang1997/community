@@ -65,4 +65,12 @@ public class QuestionServiceImpl implements QuestionService {
     public void updataQuestionTime(long gmtModified, long id) {
         questionMapper.updataQuestionTime(gmtModified,id);
     }
+
+    @Override
+    public PageInfo SearchQuestion(String search, int num) {
+        PageHelper.startPage(num,pageSize);
+        List<Question> list= questionMapper.querySearchQuestion(search);
+        PageInfo page = new PageInfo(list);
+        return page;
+    }
 }

@@ -80,6 +80,26 @@ public class QuestionController extends BaseController{
         return BaseInfo.successInfo("成功",pageInfo);
     }
 
+    @ResponseBody
+    @PostMapping("/search")
+    public BaseInfo QuestionSearch(String search,int pn){
+        PageInfo pageInfo;
+        try {
+            if(!"".equals(search)){
+                pageInfo=questionService.SearchQuestion(search,pn);
+            }else {
+                return BaseInfo.failInfo("查询异常",null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseInfo.failInfo("查询异常",null);
+        }
+        if(pageInfo.getList().size()==0){
+            return BaseInfo.successInfo("0000",null);
+        }
+        return BaseInfo.successInfo("成功",pageInfo);
+    }
+
     @GetMapping("/{id}")
     public String question(@PathVariable(name="id") long id, Model model){
             Question question=questionService.queryQuestionById(id);

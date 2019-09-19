@@ -3,6 +3,7 @@ package life.syang.community.community.controller;
 import com.github.pagehelper.PageInfo;
 import life.syang.community.community.model.BaseInfo;
 import life.syang.community.community.model.User;
+import life.syang.community.community.service.NotificationService;
 import life.syang.community.community.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,4 +49,22 @@ public class ProfileController extends BaseController{
         }
         return BaseInfo.successInfo("成功",pageInfo);
     }
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @ResponseBody
+    @RequestMapping("/myNotification")
+    public BaseInfo getNotificatons(int pn){
+        User user=userUtil.getUser(request);
+        if(user==null){
+            return BaseInfo.failInfo("请登陆!",null);
+        }
+        PageInfo notifications= notificationService.queryNotification(user.getId(),pn);
+        if (notifications!=null){
+            return BaseInfo.successInfo("成功",notifications);
+        }
+        return BaseInfo.failInfo("失败",notifications);
+    }
+
 }

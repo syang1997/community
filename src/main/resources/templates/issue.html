@@ -7,40 +7,53 @@
     <link rel="stylesheet" href="/css/bootstrap-theme.css"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
+    <link rel="stylesheet" href="/css/editormd.min.css"/>
     <script src="/js/bootstrap.js" type="application/javascript"></script>
     <script src="/js/question.js" type="application/javascript"></script>
+    <script src="/js/editormd.min.js" type="application/javascript"></script>
 </head>
 <body>
 <div th:insert="navigation :: nav"></div>
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span th:text="${question.id==-1}?'发布':'修改'"></span>发布</h2>
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span
+                    th:text="${question.id==-1}?'发布':'修改'"></span>发布</h2>
             <hr>
             <form>
-                <input type="text" id="questionid" th:value="${question.id}" style="display:none" />
+                <input type="text" id="questionid" th:value="${question.id}" style="display:none"/>
                 <div class="form-group">
                     <label for="title">问题标题</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题" th:value="${question.title}">
+                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题"
+                           th:value="${question.title}">
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="question-editor">
                     <label for="description">问题补充(必填)</label>
-                    <textarea class="form-control" id="description" name="description" cols="30" rows="25%" th:text="${question.description}"></textarea>
+                    <textarea style="display: none" class="form-control" id="description" name="description" cols="30"
+                              rows="25%" th:text="${question.description}"></textarea>
                 </div>
+
                 <div class="form-group">
                     <label for="tag">添加标签</label>
-                    <input type="text" class="form-control" id="tag" name="tag" placeholder="以,隔开" autocomplete="off" onclick="showSelectTag()" th:value="${question.tag}">
+                    <input type="text" class="form-control" id="tag" name="tag" placeholder="以,隔开" autocomplete="off"
+                           onclick="showSelectTag()" th:value="${question.tag}">
                     <div id="select-tag" class="question-tag-tab">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" th:class="${cartegory.cartegoryName=='开发语言'} ? 'presentation active':'presentation'" th:each="cartegory : ${tags}">
-                                <a th:href="'#'+${cartegory.cartegoryName}" aria-controls="home" role="tab" data-toggle="tab" th:text="${cartegory.cartegoryName}">前端</a>
+                            <li role="presentation"
+                                th:class="${cartegory.cartegoryName=='开发语言'} ? 'presentation active':'presentation'"
+                                th:each="cartegory : ${tags}">
+                                <a th:href="'#'+${cartegory.cartegoryName}" aria-controls="home" role="tab"
+                                   data-toggle="tab" th:text="${cartegory.cartegoryName}">前端</a>
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane "  th:class="${cartegory.cartegoryName=='开发语言'} ? 'tab-pane active':'tab-pane'"th:each="cartegory : ${tags}" th:id="${cartegory.cartegoryName}">
-                            <span class="label label-info publish-tag-tab" onclick="selectTag(this)" th:data-tag="${selectTag}" th:each="selectTag : ${cartegory.tags}">
-                                <span class="glyphicon glyphicon-tags" >
-                                    <span  th:text="' '+${selectTag}"></span>
+                            <div role="tabpanel" class="tab-pane "
+                                 th:class="${cartegory.cartegoryName=='开发语言'} ? 'tab-pane active':'tab-pane'"
+                                 th:each="cartegory : ${tags}" th:id="${cartegory.cartegoryName}">
+                            <span class="label label-info publish-tag-tab" onclick="selectTag(this)"
+                                  th:data-tag="${selectTag}" th:each="selectTag : ${cartegory.tags}">
+                                <span class="glyphicon glyphicon-tags">
+                                    <span th:text="' '+${selectTag}"></span>
                                 </span>
                             </span>
                             </div>
@@ -49,9 +62,9 @@
                     </div>
                 </div>
 
-                <div class="form-group" >
+                <div class="form-group">
                     <div id="alertmsg"></div>
-                    <button type="button" class="btn btn-success btn-issue" onclick="transmit()" >发布</button>
+                    <button type="button" class="btn btn-success btn-issue" onclick="transmit()">发布</button>
                 </div>
             </form>
         </div>
@@ -63,60 +76,76 @@
         </div>
     </div>
 </div>
+<div th:insert="footer :: foot"></div>
 </body>
-<script th:inline="none" type="text/javascript">
-function transmit() {
-    var filg=$('#questionid').val();
-    var title=$("#title").val();
-    var description=$("#description").val();
-    var tag=$("#tag").val();
-    if(title==''){
-        alertdanger("请输入标题!");
-    } else if(description==''){
-        alertdanger("请输入内容!")
-    } else if(tag==''){
-        alertdanger("请输入标签!")
-    }else {
-        if(filg==-1){
-            $.ajax({
-                type:"POST",
-                url:"/question/publish",
-                data:{"title":title,"description":description,"tag":tag},
-                success:function (result) {
-                    if(result.code==0){
-                        window.location.href="/";
-                    }if (result.code==1){
-                        alert(result.prompt);
+<script type="text/javascript">
+    $(function () {
+        var editor = editormd("question-editor", {
+            width: "100%",
+            height: 515,
+            path: "/js/lib/",
+            delay: 0,
+            watch: false,
+            placeholder: "请输入问题",
+            imageUpload: true,
+            imageFormats:["jpg","jpeg","gif","png","bmp","webp"],
+            imageUploadURL:"/file/upload"
+        });
+    });
+
+    function transmit() {
+        var filg = $('#questionid').val();
+        var title = $("#title").val();
+        var description = $("#description").val();
+        var tag = $("#tag").val();
+        if (title == '') {
+            alertdanger("请输入标题!");
+        } else if (description == '') {
+            alertdanger("请输入内容!")
+        } else if (tag == '') {
+            alertdanger("请输入标签!")
+        } else {
+            if (filg == -1) {
+                $.ajax({
+                    type: "POST",
+                    url: "/question/publish",
+                    data: {"title": title, "description": description, "tag": tag},
+                    success: function (result) {
+                        if (result.code == 0) {
+                            window.location.href = "/";
+                        }
+                        if (result.code == 1) {
+                            alert(result.prompt);
+                        }
                     }
-                }
-            });
-        }
-        else {
-            $.ajax({
-                type:"POST",
-                url:"/question/update",
-                data:{"title":title,"description":description,"tag":tag,"id":filg},
-                success:function (result) {
-                    if(result.code==0){
-                        window.location.href="/";
-                    }if (result.code==1){
-                        alert(result.prompt);
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/question/update",
+                    data: {"title": title, "description": description, "tag": tag, "id": filg},
+                    success: function (result) {
+                        if (result.code == 0) {
+                            window.location.href = "/";
+                        }
+                        if (result.code == 1) {
+                            alert(result.prompt);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
+
     }
 
-}
-
-function alertdanger(msg) {
-    var falg=$("#alertmsg").html();
-    if(falg==''){
-        var li='<div class="alert alert-danger" role="alert" id="daner_alert"></div>';
-        $("#alertmsg").append(li);
+    function alertdanger(msg) {
+        var falg = $("#alertmsg").html();
+        if (falg == '') {
+            var li = '<div class="alert alert-danger" role="alert" id="daner_alert"></div>';
+            $("#alertmsg").append(li);
+        }
+        $("#daner_alert").empty();
+        $("#daner_alert").text(msg);
     }
-    $("#daner_alert").empty();
-    $("#daner_alert").text(msg);
-}
 </script>
 </html>
