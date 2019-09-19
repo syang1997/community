@@ -59,4 +59,9 @@ public class CommentServiceImpl implements CommentService {
     public Comment queryCommentById(long id) {
         return commentMapper.queryCommentById(id);
     }
+
+    @Override
+    public void incLikeCount(long id) {
+        commentMapper.incCommentLikeCount(id);
+    }
 }

@@ -32,4 +32,7 @@ public interface CommentMapper {
 
     @Select("select * from comment where id=#{0}")
     Comment queryByCreater();
+
+    @Update("update comment set like_count=like_count+1 where id=#{id}")
+    void incCommentLikeCount(@Param("id")long id);
 }

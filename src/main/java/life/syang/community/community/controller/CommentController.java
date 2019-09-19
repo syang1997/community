@@ -85,6 +85,13 @@ public class CommentController extends BaseController{
         return BaseInfo.successInfo("获取成功",lists);
     }
 
+    @RequestMapping("/like")
+    @ResponseBody
+    public BaseInfo likeComment(long id){
+        commentService.incLikeCount(id);
+        return BaseInfo.successInfo("点赞",null);
+    }
+
     private Notification createNotification(long outerId, User user, User receiver,NotificationTypeEnum notificationTypeEnum,String title) {
         Notification notification=new Notification();
         notification.setGmtCreate(System.currentTimeMillis());

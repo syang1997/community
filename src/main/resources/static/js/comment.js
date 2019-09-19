@@ -47,7 +47,7 @@ function getComment(id) {
                         '                        </h5>\n' +
                         '                        <div>' + comments.content + '</div>\n' +
                         '                        <div class="menu" id="collpase-'+comments.id+'">\n' +
-                        '                            <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"></span>\n' +
+                        '                            <span class="glyphicon glyphicon-thumbs-up icon" data-id="'+comments.id+'" onclick="like(this)" aria-hidden="true"></span><span id="likeCount">'+comments.likeCount+'</span>\n' +
                         '                            <span class="glyphicon glyphicon-comment icon" data-id="'+comments.id+'" data-collapse="in" onclick="collapseComents(this)" aria-hidden="true"></span><span>'+comments.replyCount+'</span>\n' +
                         '                            <span class="pull-right" >'+formatDate(comments.gmtCreate)+'</span>\n' +
                         '                        </div>\n' +
@@ -86,6 +86,21 @@ function collapseComents(e) {
         e.setAttribute("data-collapse","in");
         e.classList.remove("active");
     }
+}
+
+function like(e) {
+    var id=e.getAttribute("data-id");
+    e.classList.add("active");
+    $.ajax({
+        type:"POST",
+        url:"/comment/like",
+        data:{"id":id},
+        success:function (result) {
+            if(result.code==0){
+                $("#likeCount").text(parseInt($("#likeCount").text())+1)
+            }
+        }
+    });
 }
 
 function postCollapseComents(id) {

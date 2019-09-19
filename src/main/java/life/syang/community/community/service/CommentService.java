@@ -18,4 +18,6 @@ public interface CommentService {
     void incCommentCount(long id);
 
     Comment queryCommentById(long id);
+
+    void incLikeCount(long id);
 }
